@@ -18,6 +18,7 @@ const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Settings = lazy(() => import('./pages/Settings'));
 const CreatorPayments = lazy(() => import('./pages/CreatorPayments'));
 const AdminPayments = lazy(() => import('./pages/AdminPayments'));
+const MySubscriptions = lazy(() => import('./pages/MySubscriptions'));
 
 function LoadingPage() {
   return (
@@ -94,6 +95,7 @@ export default function App() {
         <Route path="/messages" element={<PrivateRoute><Messages /></PrivateRoute>} />
         <Route path="/messages/:userId" element={<PrivateRoute><Messages /></PrivateRoute>} />
         <Route path="/parametres" element={<PrivateRoute><Settings /></PrivateRoute>} />
+        <Route path="/mes-abonnements" element={<PrivateRoute><MySubscriptions /></PrivateRoute>} />
 
         {/* Créateur seulement */}
         <Route path="/publier" element={<CreatorRoute><Upload /></CreatorRoute>} />
