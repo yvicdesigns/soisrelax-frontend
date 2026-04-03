@@ -84,6 +84,7 @@
 
 .content-card__video-thumb {
   position: relative;
+  overflow: hidden;
 }
 
 .content-card__play-btn {
