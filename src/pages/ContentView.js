@@ -21,12 +21,15 @@ export default function ContentView() {
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['content', id],
     queryFn: () => contentAPI.getContent(id).then((r) => r.data),
-    onSuccess: (data) => {
-      setLiked(data.userLiked);
-      setLikesCount(data.content.likes_count);
-      setComments(data.content.comments || []);
-    },
   });
+
+  React.useEffect(() => {
+    if (data) {
+      setLiked(data.userLiked);
+      setLikesCount(data.content?.likes_count || 0);
+      setComments(data.content?.comments || []);
+    }
+  }, [data]);
 
   if (isLoading) {
     return <div className="loading-center" style={{ height: '80vh' }}><div className="spinner" /></div>;

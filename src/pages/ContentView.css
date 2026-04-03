@@ -59,9 +59,11 @@
 
 .content-view__video {
   width: 100%;
-  max-height: 400px;
+  max-height: 560px;
   background: #000;
   display: block;
+  outline: none;
+  border-radius: 0;
 }
 
 .content-view__locked {
