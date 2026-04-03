@@ -1,0 +1,163 @@
+.upload {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.upload__title {
+  margin: 16px 0 20px;
+}
+
+.upload__dropzone {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 32px 20px;
+  text-align: center;
+  transition: all 0.2s;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.upload__dropzone:hover:not(.upload__dropzone--has-file) {
+  border-color: var(--primary);
+  background: #FFF5F0;
+}
+
+.upload__dropzone--has-file {
+  border-style: solid;
+  border-color: var(--success);
+  padding: 0;
+  cursor: default;
+}
+
+.upload__dropzone-text {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.upload__dropzone-hint {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.upload__preview-img {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: contain;
+}
+
+.upload__remove-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload__textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Accès */
+.upload__access-section {
+  margin-bottom: 20px;
+}
+
+.upload__access-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.upload__access-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+}
+
+.upload__access-btn.active {
+  border-color: var(--primary);
+  background: #FFF0EB;
+}
+
+.upload__access-btn-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.upload__access-btn-desc {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-top: 1px;
+}
+
+/* Prix PPV */
+.upload__ppv-price {
+  margin-top: 16px;
+}
+
+.upload__price-presets {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.upload__price-btn {
+  padding: 10px 4px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.upload__price-btn.active {
+  border-color: var(--primary);
+  background: #FFF0EB;
+  color: var(--primary);
+}
+
+/* Résumé */
+.upload__summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-top: 1px solid var(--border);
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.upload__summary-value {
+  font-weight: 600;
+  color: var(--text);
+}

@@ -1,0 +1,464 @@
+/* ===== Admin Payments Dashboard ===== */
+
+.adm-page { padding-bottom: 32px; min-height: 100vh; }
+
+.adm-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* ─── En-tête ─────────────────────────────────────────── */
+.adm-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0 12px;
+  flex-wrap: wrap;
+}
+
+.adm-header__title {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.adm-header__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: var(--danger);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.adm-header__sub {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.adm-header__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.spin { animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── Onglets ─────────────────────────────────────────── */
+.adm-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.adm-tab {
+  padding: 10px 18px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.adm-tab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+/* ─── KPIs ────────────────────────────────────────────── */
+.adm-kpis {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 600px) {
+  .adm-kpis { grid-template-columns: repeat(4, 1fr); }
+}
+
+.adm-kpi {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  padding: 16px;
+  border-left: 4px solid var(--kpi-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.adm-kpi__value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--kpi-color);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.adm-kpi__label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.adm-kpi__sub {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  margin-top: 3px;
+}
+
+/* ─── Section ─────────────────────────────────────────── */
+.adm-section { margin-bottom: 24px; }
+
+.adm-section__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+/* ─── Tableau ─────────────────────────────────────────── */
+.adm-table-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+  -webkit-overflow-scrolling: touch;
+}
+
+.adm-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 680px;
+}
+
+.adm-table th {
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  background: var(--border-light);
+  border-bottom: 1.5px solid var(--border);
+  white-space: nowrap;
+}
+
+.adm-tr td { border-bottom: 1px solid var(--border-light); }
+.adm-tr:last-child td { border-bottom: none; }
+.adm-tr:hover { background: #FAFAFA; }
+
+.adm-tr--urgent { background: #FFFBF0; }
+.adm-tr--urgent:hover { background: #FFF8E1; }
+.adm-tr--critical { background: #FFF5F5; }
+.adm-tr--critical:hover { background: #FFEBEE; }
+
+.adm-td {
+  padding: 10px 12px;
+  font-size: 0.85rem;
+  vertical-align: middle;
+}
+
+.adm-td--ref { min-width: 160px; }
+.adm-td--type { min-width: 120px; }
+.adm-td--amount { font-weight: 700; color: var(--primary); white-space: nowrap; }
+.adm-td--age { min-width: 60px; }
+.adm-td--actions { min-width: 96px; white-space: nowrap; }
+
+.adm-td__date { font-size: 0.72rem; color: var(--text-secondary); margin-top: 2px; }
+.adm-td__method { font-size: 0.72rem; color: var(--text-secondary); margin-top: 2px; }
+
+.adm-ref {
+  font-size: 0.8rem;
+  background: var(--border-light);
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+}
+
+.adm-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 140px;
+}
+
+.adm-user__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.adm-user__name { font-weight: 500; font-size: 0.85rem; }
+.adm-user__meta { font-size: 0.72rem; color: var(--text-secondary); }
+
+/* ─── Statut badge ────────────────────────────────────── */
+.adm-status {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.adm-status--success { background: #E8F5E9; color: var(--success); }
+.adm-status--danger  { background: #FFEBEE; color: var(--danger); }
+.adm-status--warning { background: #FFF8E1; color: #B7700A; }
+.adm-status--neutral { background: var(--border-light); color: var(--text-secondary); }
+
+/* ─── Age ─────────────────────────────────────────────── */
+.adm-age {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.adm-age--urgent  { color: var(--warning); font-weight: 700; }
+.adm-age--critical{ color: var(--danger);  font-weight: 700; }
+
+/* ─── Action buttons ──────────────────────────────────── */
+.adm-action-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-right: 4px;
+}
+
+.adm-action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.adm-action-btn--eye     { background: var(--border-light); color: var(--text); }
+.adm-action-btn--eye:hover { background: var(--border); }
+.adm-action-btn--approve { background: #E8F5E9; color: var(--success); }
+.adm-action-btn--approve:hover { background: var(--success); color: #fff; }
+.adm-action-btn--reject  { background: #FFEBEE; color: var(--danger); }
+.adm-action-btn--reject:hover  { background: var(--danger); color: #fff; }
+
+/* ─── Détail inline ───────────────────────────────────── */
+.adm-tr-detail td { padding: 0; background: var(--bg); }
+
+.adm-detail {
+  padding: 16px;
+  border-bottom: 2px solid var(--border);
+}
+
+.adm-detail__cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 700px) {
+  .adm-detail__cols { grid-template-columns: 1fr; }
+}
+
+.adm-detail__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.adm-detail__img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--border-light);
+}
+
+.adm-detail__txid {
+  font-size: 0.82rem;
+  background: var(--border-light);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  display: block;
+}
+
+.adm-detail__empty { font-size: 0.82rem; color: var(--text-secondary); }
+
+.adm-detail__check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  padding: 3px 0;
+}
+
+.adm-detail__check input { width: 15px; height: 15px; accent-color: var(--success); }
+
+.adm-detail__info-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  padding: 3px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.adm-detail__info-row:last-child { border-bottom: none; }
+.adm-detail__info-row span:first-child { color: var(--text-secondary); }
+.adm-detail__info-row span:last-child { font-weight: 500; }
+
+.adm-detail__flag {
+  margin-top: 8px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: #FFF8E1;
+  color: #7A5800;
+}
+
+.adm-detail__flag--critical {
+  background: #FFEBEE;
+  color: var(--danger);
+}
+
+/* ─── Modal rejet (dans tableau) ─────────────────────── */
+.adm-reject-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.adm-reject-modal__box {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.adm-reject-modal__box h3 { font-size: 1rem; }
+
+.adm-reject-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.adm-reject-preset {
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.adm-reject-preset.active {
+  border-color: var(--danger);
+  background: #FFEBEE;
+  color: var(--danger);
+  font-weight: 500;
+}
+
+.adm-reject-modal__actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* ─── Filtres liste ───────────────────────────────────── */
+.adm-filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding: 14px;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+}
+
+.adm-filter-select {
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  font-size: 0.85rem;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.adm-filter-date {
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  font-size: 0.82rem;
+  color: var(--text);
+}
+
+.adm-filter-sep { color: var(--text-secondary); font-size: 0.85rem; }
+
+/* ─── Métadonnées liste ───────────────────────────────── */
+.adm-list-meta {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+/* ─── État vide ───────────────────────────────────────── */
+.adm-empty {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Danger button (shared) */
+.btn--danger {
+  background: var(--danger);
+  color: #fff;
+  border: none;
+}
+
+.btn--danger:hover { background: #E53935; }
+.btn--danger:disabled { opacity: 0.5; cursor: not-allowed; }

@@ -1,0 +1,152 @@
+.content-card {
+  background: var(--bg-card);
+  border-bottom: 8px solid var(--bg);
+  overflow: hidden;
+}
+
+.content-card__header {
+  padding: 12px 16px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.content-card__creator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.content-card__avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.content-card__creator-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.content-card__verified {
+  color: var(--secondary);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.content-card__time {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 1px;
+}
+
+.content-card__description {
+  padding: 0 16px 10px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.content-card__media-link {
+  display: block;
+  text-decoration: none;
+}
+
+.content-card__media {
+  position: relative;
+  width: 100%;
+  min-height: 200px;
+  background: var(--border-light);
+  overflow: hidden;
+}
+
+.content-card__img {
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  object-fit: cover;
+  display: block;
+}
+
+.content-card__img--blur {
+  filter: blur(20px);
+  transform: scale(1.05);
+}
+
+.content-card__video-thumb {
+  position: relative;
+}
+
+.content-card__play-btn {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.3);
+}
+
+.content-card__play-btn svg {
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+}
+
+.content-card__lock-text {
+  font-size: 0.9rem;
+  margin: 8px 0;
+  font-weight: 500;
+}
+
+.content-card__unlock-btn {
+  margin-top: 4px;
+}
+
+.content-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px 12px;
+}
+
+.content-card__action-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 10px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.content-card__action-btn:hover {
+  background: var(--border-light);
+  color: var(--text);
+}
+
+.content-card__action-btn--liked {
+  color: #FF3B30;
+}
+
+.content-card__action-btn--liked:hover {
+  color: #FF3B30;
+}
+
+.content-card__views {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--text-light);
+}
