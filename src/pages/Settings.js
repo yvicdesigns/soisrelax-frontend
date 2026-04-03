@@ -1,10 +1,66 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiUser, FiLock, FiSmartphone, FiLogOut, FiCamera } from 'react-icons/fi';
+import { FiUser, FiLock, FiSmartphone, FiLogOut, FiCamera, FiStar } from 'react-icons/fi';
 import { userAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
 import './Settings.css';
+
+function BecomeCreatorSection({ onSuccess }) {
+  const [price, setPrice] = useState(2500);
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await userAPI.becomeCreator(price);
+      onSuccess(res.data.user);
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Erreur');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="settings__section settings__section--creator">
+      <h3 className="settings__section-title"><FiStar size={16} /> Devenir créateur</h3>
+      {!open ? (
+        <>
+          <p className="settings__creator-desc">
+            Publiez du contenu exclusif et monétisez votre audience. Vous gagnez 80% de chaque abonnement.
+          </p>
+          <button className="btn btn--primary btn--full" onClick={() => setOpen(true)}>
+            <FiStar size={16} /> Devenir créateur
+          </button>
+        </>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label className="form-label">Prix d'abonnement mensuel (FCFA)</label>
+            <input
+              type="number"
+              className="form-input"
+              min={500}
+              step={500}
+              value={price}
+              onChange={(e) => setPrice(parseInt(e.target.value) || 2500)}
+            />
+            <p className="form-hint">Vous gagnerez {Math.round(price * 0.8).toLocaleString('fr-FR')} FCFA par abonné.</p>
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button type="button" className="btn btn--outline" onClick={() => setOpen(false)}>Annuler</button>
+            <button type="submit" className="btn btn--primary" style={{ flex: 1 }} disabled={loading}>
+              {loading ? 'En cours...' : 'Confirmer'}
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
+  );
+}
 
 export default function Settings() {
   const { user, updateUser, logout, isCreator } = useAuth();
@@ -163,6 +219,9 @@ export default function Settings() {
             {loading ? 'Enregistrement...' : 'Sauvegarder'}
           </button>
         </form>
+
+        {/* Devenir créateur (abonnés seulement) */}
+        {user?.role === 'subscriber' && <BecomeCreatorSection onSuccess={(updatedUser) => { updateUser(updatedUser); toast.success('Vous êtes maintenant créateur !'); navigate('/tableau-de-bord'); }} />}
 
         {/* Déconnexion */}
         <div className="settings__section settings__section--danger">

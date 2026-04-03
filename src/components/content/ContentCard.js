@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiHeart, FiMessageCircle, FiLock, FiPlay, FiDollarSign } from 'react-icons/fi';
+import { FiHeart, FiMessageCircle, FiLock, FiPlay, FiDollarSign, FiMoreVertical, FiTrash2, FiEdit2 } from 'react-icons/fi';
 import { contentAPI, formatFCFA, formatDate } from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
 import PaymentModal from '../payment/PaymentModal';
@@ -14,6 +14,46 @@ export default function ContentCard({ content, onUpdate }) {
   const [likesCount, setLikesCount] = useState(content.likes_count || 0);
   const [showPayment, setShowPayment] = useState(false);
   const [paymentType, setPaymentType] = useState('subscription');
+  const [showMenu, setShowMenu] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [editForm, setEditForm] = useState({ title: content.title || '', description: content.description || '' });
+  const [editLoading, setEditLoading] = useState(false);
+  const menuRef = useRef(null);
+  const isOwner = user?.id === content.creator?.id;
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) setShowMenu(false);
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  async function handleDelete() {
+    if (!window.confirm('Supprimer cette publication définitivement ?')) return;
+    try {
+      await contentAPI.delete(content.id);
+      toast.success('Publication supprimée');
+      onUpdate?.();
+    } catch {
+      toast.error('Erreur lors de la suppression');
+    }
+  }
+
+  async function handleEditSave(e) {
+    e.preventDefault();
+    setEditLoading(true);
+    try {
+      await contentAPI.update(content.id, editForm);
+      toast.success('Publication mise à jour');
+      setShowEdit(false);
+      onUpdate?.();
+    } catch {
+      toast.error('Erreur lors de la mise à jour');
+    } finally {
+      setEditLoading(false);
+    }
+  }
 
   const isLocked = content.is_locked;
   const isVideo = content.content_type === 'video';
@@ -60,6 +100,24 @@ export default function ContentCard({ content, onUpdate }) {
               <div className="content-card__time">{formatDate(content.created_at)}</div>
             </div>
           </Link>
+
+          {isOwner && (
+            <div className="content-card__menu-wrap" ref={menuRef}>
+              <button className="content-card__menu-btn" onClick={() => setShowMenu((v) => !v)}>
+                <FiMoreVertical size={18} />
+              </button>
+              {showMenu && (
+                <div className="content-card__menu-dropdown">
+                  <button className="content-card__menu-item" onClick={() => { setShowEdit(true); setShowMenu(false); }}>
+                    <FiEdit2 size={15} /> Modifier
+                  </button>
+                  <button className="content-card__menu-item content-card__menu-item--danger" onClick={handleDelete}>
+                    <FiTrash2 size={15} /> Supprimer
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Description */}
@@ -148,6 +206,37 @@ export default function ContentCard({ content, onUpdate }) {
             onUpdate?.();
           }}
         />
+      )}
+
+      {showEdit && (
+        <div className="content-card__edit-overlay" onClick={() => setShowEdit(false)}>
+          <div className="content-card__edit-modal" onClick={(e) => e.stopPropagation()}>
+            <h3 className="content-card__edit-title">Modifier la publication</h3>
+            <form onSubmit={handleEditSave}>
+              <label className="content-card__edit-label">Titre</label>
+              <input
+                className="content-card__edit-input"
+                value={editForm.title}
+                onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                placeholder="Titre (optionnel)"
+              />
+              <label className="content-card__edit-label">Description</label>
+              <textarea
+                className="content-card__edit-input content-card__edit-textarea"
+                value={editForm.description}
+                onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                placeholder="Description..."
+                rows={4}
+              />
+              <div className="content-card__edit-actions">
+                <button type="button" className="btn btn--outline" onClick={() => setShowEdit(false)}>Annuler</button>
+                <button type="submit" className="btn btn--primary" disabled={editLoading}>
+                  {editLoading ? 'Sauvegarde...' : 'Sauvegarder'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
     </>
   );

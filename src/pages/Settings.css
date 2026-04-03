@@ -72,3 +72,15 @@
   box-shadow: none;
   margin-top: 8px;
 }
+
+.settings__section--creator {
+  background: linear-gradient(135deg, #FFF0EB 0%, #fff 100%);
+  border: 2px solid #FF6B35;
+}
+
+.settings__creator-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}

@@ -156,3 +156,129 @@
   font-size: 0.75rem;
   color: var(--text-light);
 }
+
+.content-card__menu-wrap {
+  position: relative;
+}
+
+.content-card__menu-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  color: var(--text-secondary);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.content-card__menu-btn:hover {
+  background: var(--border-light);
+  color: var(--text);
+}
+
+.content-card__menu-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  background: #fff;
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  min-width: 150px;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.content-card__menu-item {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 12px 16px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+}
+
+.content-card__menu-item:hover {
+  background: var(--bg);
+}
+
+.content-card__menu-item--danger {
+  color: #E53935;
+}
+
+.content-card__menu-item--danger:hover {
+  background: #FFF5F5;
+}
+
+/* Modal édition */
+.content-card__edit-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.content-card__edit-modal {
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+.content-card__edit-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+
+.content-card__edit-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  margin-top: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.content-card__edit-input {
+  width: 100%;
+  border: 2px solid var(--border-light);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--bg);
+  box-sizing: border-box;
+  outline: none;
+}
+
+.content-card__edit-input:focus {
+  border-color: var(--primary);
+}
+
+.content-card__edit-textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.content-card__edit-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}

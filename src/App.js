@@ -18,7 +18,9 @@ const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Settings = lazy(() => import('./pages/Settings'));
 const CreatorPayments = lazy(() => import('./pages/CreatorPayments'));
 const AdminPayments = lazy(() => import('./pages/AdminPayments'));
+const AdminUsers = lazy(() => import('./pages/AdminUsers'));
 const MySubscriptions = lazy(() => import('./pages/MySubscriptions'));
+const MyEarnings = lazy(() => import('./pages/MyEarnings'));
 
 function LoadingPage() {
   return (
@@ -101,9 +103,11 @@ export default function App() {
         <Route path="/publier" element={<CreatorRoute><Upload /></CreatorRoute>} />
         <Route path="/tableau-de-bord" element={<CreatorRoute><Dashboard /></CreatorRoute>} />
         <Route path="/paiements" element={<CreatorRoute><CreatorPayments /></CreatorRoute>} />
+        <Route path="/mes-revenus" element={<CreatorRoute><MyEarnings /></CreatorRoute>} />
 
         {/* Admin seulement */}
         <Route path="/admin/paiements" element={<AdminRoute><AdminPayments /></AdminRoute>} />
+        <Route path="/admin/utilisateurs" element={<AdminRoute><AdminUsers /></AdminRoute>} />
 
         {/* Redirection */}
         <Route path="*" element={<Navigate to="/" replace />} />

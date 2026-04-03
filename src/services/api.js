@@ -98,6 +98,10 @@ export const userAPI = {
   updateCover: (formData) => api.patch('/users/me/cover', formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
   follow: (userId) => api.post(`/users/${userId}/follow`),
   getStats: () => api.get('/users/me/stats'),
+  adminListUsers: (params) => api.get('/users/admin/list', { params }),
+  adminVerify: (id) => api.patch(`/users/admin/${id}/verify`),
+  adminToggleActive: (id) => api.patch(`/users/admin/${id}/toggle-active`),
+  becomeCreator: (subscription_price) => api.post('/users/me/become-creator', { subscription_price }),
 };
 
 // ===== Content =====
@@ -108,6 +112,7 @@ export const contentAPI = {
   create: (formData) => api.post('/content', formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
   like: (id) => api.post(`/content/${id}/like`),
   comment: (id, text) => api.post(`/content/${id}/comment`, { text }),
+  update: (id, data) => api.patch(`/content/${id}`, data),
   delete: (id) => api.delete(`/content/${id}`),
 };
 
