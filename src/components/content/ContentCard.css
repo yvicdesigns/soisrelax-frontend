@@ -85,6 +85,11 @@
 .content-card__video-thumb {
   position: relative;
   overflow: hidden;
+  min-height: 240px;
+  background: #1a1a2e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .content-card__play-btn {
