@@ -244,7 +244,7 @@ function PaymentRow({ payment, onApprove, onReject, isActing }) {
 // ─── PAGE ADMIN ───────────────────────────────────────────────────────────────
 export default function AdminPayments() {
   const queryClient = useQueryClient();
-  const [view, setView] = useState('dashboard'); // 'dashboard' | 'list'
+  const [view, setView] = useState('dashboard'); // 'dashboard' | 'list' | 'withdrawals'
   const [filters, setFilters] = useState({ status: 'submitted', payment_method: '', date_from: '', date_to: '' });
   const [actingId, setActingId] = useState(null);
 
@@ -253,6 +253,25 @@ export default function AdminPayments() {
     queryKey: ['admin-dashboard'],
     queryFn: () => api.get('/payments/admin/dashboard').then((r) => r.data),
     refetchInterval: 20000,
+  });
+
+  // ── Retraits ──────────────────────────────────────────────
+  const { data: withdrawData, isLoading: withdrawLoading, refetch: refetchWithdrawals } = useQuery({
+    queryKey: ['admin-withdrawals'],
+    queryFn: () => api.get('/payments/admin/withdrawals', { params: { status: 'all' } }).then((r) => r.data),
+    enabled: view === 'withdrawals',
+  });
+
+  const completeWithdrawMutation = useMutation({
+    mutationFn: ({ id, note }) => api.post(`/payments/admin/withdrawals/${id}/complete`, { admin_note: note }),
+    onSuccess: () => { toast.success('Retrait marqué comme effectué'); queryClient.invalidateQueries({ queryKey: ['admin-withdrawals'] }); },
+    onError: (err) => toast.error(err.response?.data?.error || 'Erreur'),
+  });
+
+  const rejectWithdrawMutation = useMutation({
+    mutationFn: ({ id, note }) => api.post(`/payments/admin/withdrawals/${id}/reject`, { admin_note: note }),
+    onSuccess: () => { toast.success('Retrait rejeté, solde remboursé'); queryClient.invalidateQueries({ queryKey: ['admin-withdrawals'] }); },
+    onError: (err) => toast.error(err.response?.data?.error || 'Erreur'),
   });
 
   // ── Liste filtrée (vue liste) ──────────────────────────────
@@ -355,6 +374,12 @@ export default function AdminPayments() {
             onClick={() => setView('list')}
           >
             📋 Liste complète
+          </button>
+          <button
+            className={`adm-tab ${view === 'withdrawals' ? 'active' : ''}`}
+            onClick={() => setView('withdrawals')}
+          >
+            💸 Retraits
           </button>
         </div>
 
@@ -534,6 +559,92 @@ export default function AdminPayments() {
             )}
           </>
         )}
+        {/* ═══════════════════════════════════════════════════
+            VUE RETRAITS
+        ═══════════════════════════════════════════════════ */}
+        {view === 'withdrawals' && (
+          <>
+            {withdrawLoading ? (
+              <div className="loading-center" style={{ minHeight: 200 }}><div className="spinner" /></div>
+            ) : (
+              <div className="adm-table-wrap">
+                <table className="adm-table">
+                  <thead>
+                    <tr>
+                      <th>Créateur</th>
+                      <th>Montant</th>
+                      <th>Opérateur</th>
+                      <th>Numéro</th>
+                      <th>Statut</th>
+                      <th>Date</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(withdrawData?.withdrawals || []).map((w) => (
+                      <tr key={w.id} className={`adm-tr ${w.status === 'pending' ? 'adm-tr--urgent' : ''}`}>
+                        <td className="adm-td">
+                          <div className="adm-user">
+                            <img
+                              src={w.creator?.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(w.creator?.display_name || '?')}&background=FF6B35&color=fff&size=32`}
+                              alt="" className="adm-user__avatar"
+                            />
+                            <div>
+                              <div className="adm-user__name">{w.creator?.display_name}</div>
+                              <div className="adm-user__meta">@{w.creator?.username}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="adm-td adm-td--amount">{formatFCFA(w.amount)}</td>
+                        <td className="adm-td">{w.provider?.toUpperCase()}</td>
+                        <td className="adm-td"><code>{w.phone_number}</code></td>
+                        <td className="adm-td">
+                          <span className={`adm-status adm-status--${
+                            w.status === 'completed' ? 'success' :
+                            w.status === 'rejected' ? 'danger' :
+                            w.status === 'processing' ? 'warning' : 'warning'
+                          }`}>
+                            {w.status === 'pending' ? 'En attente' :
+                             w.status === 'processing' ? 'En cours' :
+                             w.status === 'completed' ? 'Effectué' : 'Rejeté'}
+                          </span>
+                        </td>
+                        <td className="adm-td adm-td--date">{formatDate(w.created_at)}</td>
+                        <td className="adm-td adm-td--actions">
+                          {(w.status === 'pending' || w.status === 'processing') && (
+                            <>
+                              <button
+                                className="adm-action-btn adm-action-btn--approve"
+                                title="Marquer effectué"
+                                onClick={() => completeWithdrawMutation.mutate({ id: w.id })}
+                              >
+                                <FiCheck size={15} />
+                              </button>
+                              <button
+                                className="adm-action-btn adm-action-btn--reject"
+                                title="Rejeter"
+                                onClick={() => {
+                                  const note = window.prompt('Raison du rejet:');
+                                  if (note !== null) rejectWithdrawMutation.mutate({ id: w.id, note });
+                                }}
+                              >
+                                <FiX size={15} />
+                              </button>
+                            </>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {(withdrawData?.withdrawals || []).length === 0 && (
+                  <div className="adm-empty"><p>Aucune demande de retrait.</p></div>
+                )}
+              </div>
+            )}
+          </>
+        )}
+
       </div>
     </div>
   );
