@@ -22,6 +22,7 @@ const AdminUsers = lazy(() => import('./pages/AdminUsers'));
 const MySubscriptions = lazy(() => import('./pages/MySubscriptions'));
 const MyEarnings = lazy(() => import('./pages/MyEarnings'));
 const Notifications = lazy(() => import('./pages/Notifications'));
+const AdminContent = lazy(() => import('./pages/AdminContent'));
 
 function LoadingPage() {
   return (
@@ -110,6 +111,7 @@ export default function App() {
         {/* Admin seulement */}
         <Route path="/admin/paiements" element={<AdminRoute><AdminPayments /></AdminRoute>} />
         <Route path="/admin/utilisateurs" element={<AdminRoute><AdminUsers /></AdminRoute>} />
+        <Route path="/admin/contenu" element={<AdminRoute><AdminContent /></AdminRoute>} />
 
         {/* Redirection */}
         <Route path="*" element={<Navigate to="/" replace />} />

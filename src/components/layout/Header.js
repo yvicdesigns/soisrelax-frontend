@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiSearch, FiMessageCircle, FiUser, FiSettings, FiLogOut, FiGrid, FiBell, FiHeart, FiShield, FiDollarSign } from 'react-icons/fi';
+import { FiSearch, FiMessageCircle, FiUser, FiSettings, FiLogOut, FiGrid, FiBell, FiHeart, FiShield, FiDollarSign, FiFilm } from 'react-icons/fi';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../../contexts/AuthContext';
 import { notificationAPI, formatDate } from '../../services/api';
@@ -230,6 +230,13 @@ export default function Header() {
                           onClick={() => setMenuOpen(false)}
                         >
                           <FiShield size={16} /> Admin — Utilisateurs
+                        </Link>
+                        <Link
+                          to="/admin/contenu"
+                          className="header__dropdown-item"
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          <FiFilm size={16} /> Admin — Contenu
                         </Link>
                       </>
                     )}
