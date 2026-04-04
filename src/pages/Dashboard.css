@@ -135,3 +135,60 @@
   left: 0;
   color: var(--primary);
 }
+
+.dashboard__withdrawals {
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.dashboard__withdraw-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 12px;
+}
+
+.dashboard__withdraw-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.dashboard__withdraw-item:last-child {
+  border-bottom: none;
+}
+
+.dashboard__withdraw-amount {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.dashboard__withdraw-date {
+  font-size: 0.75rem;
+  margin-top: 2px;
+}
+
+.dashboard__withdraw-status {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.dashboard__withdraw-status--completed {
+  background: #E8F5E9;
+  color: var(--success);
+}
+
+.dashboard__withdraw-status--rejected {
+  background: #FFEBEE;
+  color: var(--danger);
+}
+
+.dashboard__withdraw-status--pending,
+.dashboard__withdraw-status--processing {
+  background: #FFF8E1;
+  color: var(--warning);
+}

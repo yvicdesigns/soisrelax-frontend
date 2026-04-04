@@ -1,8 +1,8 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { FiUsers, FiDollarSign, FiTrendingUp, FiDownload, FiCheckCircle } from 'react-icons/fi';
-import { userAPI, paymentAPI, formatFCFA } from '../services/api';
+import { FiUsers, FiDollarSign, FiTrendingUp, FiDownload, FiCheckCircle, FiClock } from 'react-icons/fi';
+import { userAPI, paymentAPI, formatFCFA, formatDate } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
 import api from '../services/api';
@@ -18,6 +18,11 @@ export default function Dashboard() {
     queryKey: ['creator-stats'],
     queryFn: () => userAPI.getStats().then((r) => r.data),
     refetchInterval: 60000,
+  });
+
+  const { data: withdrawalsData } = useQuery({
+    queryKey: ['my-withdrawals'],
+    queryFn: () => paymentAPI.getMyWithdrawals().then((r) => r.data),
   });
 
   const { data: pendingData } = useQuery({
@@ -133,6 +138,26 @@ export default function Dashboard() {
             <span className="dashboard__payments-badge">{pendingData.pending_count}</span>
           )}
         </Link>
+
+        {/* Historique retraits */}
+        {(withdrawalsData?.withdrawals?.length ?? 0) > 0 && (
+          <div className="dashboard__withdrawals card">
+            <h3 className="dashboard__tips-title"><FiClock size={16} /> Historique des retraits</h3>
+            <div className="dashboard__withdraw-list">
+              {withdrawalsData.withdrawals.slice(0, 5).map((w) => (
+                <div key={w.id} className="dashboard__withdraw-item">
+                  <div>
+                    <div className="dashboard__withdraw-amount">{formatFCFA(w.amount)}</div>
+                    <div className="dashboard__withdraw-date text-secondary">{formatDate(w.created_at)}</div>
+                  </div>
+                  <span className={`dashboard__withdraw-status dashboard__withdraw-status--${w.status}`}>
+                    {w.status === 'completed' ? '✓ Effectué' : w.status === 'rejected' ? '✗ Rejeté' : '⏳ En attente'}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Conseils */}
         <div className="dashboard__tips card">

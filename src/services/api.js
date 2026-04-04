@@ -129,6 +129,7 @@ export const paymentAPI = {
   notifications: () => api.get('/payments/notifications'),
   markRead: () => api.patch('/payments/notifications/read'),
   withdraw: (data) => api.post('/payments/withdraw', data),
+  getMyWithdrawals: () => api.get('/payments/my-withdrawals'),
 };
 
 // ===== Messages =====
