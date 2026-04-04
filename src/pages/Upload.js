@@ -23,6 +23,7 @@ export default function Upload() {
   });
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [thumbnail, setThumbnail] = useState(null); // blob de la miniature vidéo
 
   function handleFileChange(e) {
     const f = e.target.files?.[0];
@@ -45,6 +46,32 @@ export default function Upload() {
     setFile(f);
     const url = URL.createObjectURL(f);
     setPreview({ url, type: isVideo ? 'video' : 'image' });
+
+    // Générer thumbnail pour les vidéos
+    if (isVideo) {
+      generateVideoThumbnail(url).then((blob) => setThumbnail(blob)).catch(() => {});
+    } else {
+      setThumbnail(null);
+    }
+  }
+
+  function generateVideoThumbnail(videoUrl) {
+    return new Promise((resolve, reject) => {
+      const video = document.createElement('video');
+      video.src = videoUrl;
+      video.crossOrigin = 'anonymous';
+      video.muted = true;
+      video.currentTime = 1;
+      video.onloadeddata = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth || 640;
+        canvas.height = video.videoHeight || 360;
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error('canvas empty')), 'image/jpeg', 0.8);
+        video.remove();
+      };
+      video.onerror = reject;
+    });
   }
 
   function handleDrop(e) {
@@ -71,6 +98,7 @@ export default function Upload() {
 
     const formData = new FormData();
     if (file) formData.append('file', file);
+    if (thumbnail) formData.append('thumbnail', thumbnail, 'thumbnail.jpg');
     formData.append('description', form.description);
     formData.append('content_type', file?.type.startsWith('video/') ? 'video' : 'image');
     formData.append('is_free', form.is_free.toString());
@@ -78,14 +106,18 @@ export default function Upload() {
     formData.append('ppv_price', form.ppv_price.toString());
 
     setLoading(true);
+    setProgress(0);
     try {
-      await contentAPI.create(formData);
+      await contentAPI.create(formData, (e) => {
+        if (e.total) setProgress(Math.round((e.loaded * 100) / e.total));
+      });
       toast.success('Contenu publié avec succès !');
       navigate(`/profil/${user.username}`);
     } catch (error) {
       toast.error(error.response?.data?.error || 'Erreur lors de la publication');
     } finally {
       setLoading(false);
+      setProgress(0);
     }
   }
 
@@ -237,13 +269,22 @@ export default function Upload() {
             <span className="upload__summary-value">{accessLabel}</span>
           </div>
 
+          {loading && (
+            <div className="upload__progress">
+              <div className="upload__progress-track">
+                <div className="upload__progress-fill" style={{ width: `${progress}%` }} />
+              </div>
+              <span className="upload__progress-text">{progress}%</span>
+            </div>
+          )}
+
           <button
             type="submit"
             className="btn btn--primary btn--full btn--lg"
             disabled={loading}
           >
             {loading ? (
-              <><span className="spinner" style={{ width: 20, height: 20, borderWidth: 2 }} /> Publication en cours...</>
+              <>{progress < 100 ? `Envoi ${progress}%...` : 'Traitement...'}</>
             ) : (
               'Publier maintenant'
             )}

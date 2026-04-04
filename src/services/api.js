@@ -109,7 +109,7 @@ export const contentAPI = {
   getFeed: (page = 1) => api.get('/content/feed', { params: { page } }),
   getContent: (id) => api.get(`/content/${id}`),
   getCreatorContent: (userId, page = 1) => api.get(`/content/creator/${userId}`, { params: { page } }),
-  create: (formData) => api.post('/content', formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  create: (formData, onUploadProgress) => api.post('/content', formData, { headers: { 'Content-Type': 'multipart/form-data' }, onUploadProgress }),
   like: (id) => api.post(`/content/${id}/like`),
   comment: (id, text) => api.post(`/content/${id}/comment`, { text }),
   update: (id, data) => api.patch(`/content/${id}`, data),

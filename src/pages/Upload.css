@@ -161,3 +161,33 @@
   font-weight: 600;
   color: var(--text);
 }
+
+.upload__progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.upload__progress-track {
+  flex: 1;
+  height: 8px;
+  background: var(--border-light);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.upload__progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FF6B35, #E55A26);
+  border-radius: 999px;
+  transition: width 0.2s ease;
+}
+
+.upload__progress-text {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary);
+  min-width: 36px;
+  text-align: right;
+}
