@@ -1,15 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { FiStar, FiDollarSign, FiShield, FiSmartphone } from 'react-icons/fi';
 import { useAuth } from '../contexts/AuthContext';
 import './Home.css';
 
 export default function Home() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
-  if (user) {
-    return <div className="page"><div className="loading-center"><div className="spinner" /></div></div>;
-  }
+  if (loading) return <div className="page"><div className="loading-center" style={{ minHeight: '100vh' }}><div className="spinner" /></div></div>;
+  if (user) return <Navigate to="/fil" replace />;
 
   return (
     <div className="home page--no-nav">
@@ -138,7 +137,7 @@ export default function Home() {
       <footer className="home__footer">
         <div className="container">
           <p className="home__footer-logo">Sois<span>Relax</span></p>
-          <p>© 2024 SoisRelax · Brazzaville, République du Congo</p>
+          <p>© 2025 SoisRelax · Brazzaville, République du Congo</p>
           <div className="home__footer-links">
             <a href="#">Conditions</a>
             <a href="#">Confidentialité</a>
