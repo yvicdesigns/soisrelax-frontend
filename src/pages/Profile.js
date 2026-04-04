@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { FiGrid, FiLock, FiMessageCircle, FiUserCheck, FiUserPlus, FiDollarSign, FiSettings } from 'react-icons/fi';
+import { FiGrid, FiList, FiLock, FiMessageCircle, FiUserCheck, FiUserPlus, FiDollarSign, FiSettings, FiPlay } from 'react-icons/fi';
 import { userAPI, contentAPI, formatFCFA } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import ContentCard from '../components/content/ContentCard';
@@ -18,6 +18,7 @@ export default function Profile() {
   const [showSubscribeModal, setShowSubscribeModal] = useState(false);
   const [showTipModal, setShowTipModal] = useState(false);
   const [activeTab, setActiveTab] = useState('posts');
+  const [viewMode, setViewMode] = useState('grid');
   const [following, setFollowing] = useState(false);
 
   const { data: profileData, isPending, error } = useQuery({
@@ -189,7 +190,7 @@ export default function Profile() {
           )}
         </div>
 
-        {/* Onglets */}
+        {/* Onglets + toggle vue */}
         <div className="profile__tabs">
           <button
             className={`profile__tab ${activeTab === 'posts' ? 'active' : ''}`}
@@ -207,6 +208,22 @@ export default function Profile() {
               <span>Exclusif</span>
             </button>
           )}
+          <div className="profile__view-toggle">
+            <button
+              className={`profile__view-btn ${viewMode === 'grid' ? 'active' : ''}`}
+              onClick={() => setViewMode('grid')}
+              title="Vue grille"
+            >
+              <FiGrid size={18} />
+            </button>
+            <button
+              className={`profile__view-btn ${viewMode === 'list' ? 'active' : ''}`}
+              onClick={() => setViewMode('list')}
+              title="Vue liste"
+            >
+              <FiList size={18} />
+            </button>
+          </div>
         </div>
 
         {/* Contenu */}
@@ -224,7 +241,38 @@ export default function Profile() {
             </div>
           )}
 
-          {contents.map((content) => (
+          {viewMode === 'grid' && contents.length > 0 && (
+            <div className="profile__grid">
+              {contents.map((content) => (
+                <Link
+                  key={content.id}
+                  to={`/contenu/${content.id}`}
+                  className="profile__grid-item"
+                >
+                  {content.file_url || content.thumbnail_url ? (
+                    <img
+                      src={content.thumbnail_url || content.file_url}
+                      alt=""
+                      className={`profile__grid-img ${content.is_locked ? 'profile__grid-img--locked' : ''}`}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="profile__grid-text">
+                      <p>{content.description?.slice(0, 60)}</p>
+                    </div>
+                  )}
+                  {content.is_locked && (
+                    <div className="profile__grid-lock"><FiLock size={14} color="#fff" /></div>
+                  )}
+                  {content.content_type === 'video' && !content.is_locked && (
+                    <div className="profile__grid-play"><FiPlay size={14} color="#fff" /></div>
+                  )}
+                </Link>
+              ))}
+            </div>
+          )}
+
+          {viewMode === 'list' && contents.map((content) => (
             <ContentCard
               key={content.id}
               content={{ ...content, creator: user }}
