@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiUser, FiLock, FiSmartphone, FiLogOut, FiCamera, FiStar } from 'react-icons/fi';
 import { userAPI } from '../services/api';
+import api from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
 import './Settings.css';
@@ -73,6 +74,8 @@ export default function Settings() {
     mobile_money_provider: user?.mobile_money_provider || 'mtn',
   });
   const [loading, setLoading] = useState(false);
+  const [pwForm, setPwForm] = useState({ current_password: '', new_password: '', confirm: '' });
+  const [pwLoading, setPwLoading] = useState(false);
 
   async function handleSave(e) {
     e.preventDefault();
@@ -99,6 +102,31 @@ export default function Settings() {
       toast.success('Photo de profil mise à jour !');
     } catch {
       toast.error('Erreur lors du changement de photo');
+    }
+  }
+
+  async function handleChangePassword(e) {
+    e.preventDefault();
+    if (pwForm.new_password !== pwForm.confirm) {
+      toast.error('Les mots de passe ne correspondent pas');
+      return;
+    }
+    if (pwForm.new_password.length < 8) {
+      toast.error('Minimum 8 caractères');
+      return;
+    }
+    setPwLoading(true);
+    try {
+      await api.post('/auth/change-password', {
+        current_password: pwForm.current_password,
+        new_password: pwForm.new_password,
+      });
+      toast.success('Mot de passe modifié !');
+      setPwForm({ current_password: '', new_password: '', confirm: '' });
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Erreur');
+    } finally {
+      setPwLoading(false);
     }
   }
 
@@ -219,6 +247,46 @@ export default function Settings() {
             {loading ? 'Enregistrement...' : 'Sauvegarder'}
           </button>
         </form>
+
+        {/* Changer le mot de passe */}
+        <div className="settings__section">
+          <h3 className="settings__section-title"><FiLock size={16} /> Changer le mot de passe</h3>
+          <form onSubmit={handleChangePassword}>
+            <div className="form-group">
+              <label className="form-label">Mot de passe actuel</label>
+              <input
+                type="password"
+                className="form-input"
+                value={pwForm.current_password}
+                onChange={(e) => setPwForm({ ...pwForm, current_password: e.target.value })}
+                placeholder="Mot de passe actuel"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Nouveau mot de passe</label>
+              <input
+                type="password"
+                className="form-input"
+                value={pwForm.new_password}
+                onChange={(e) => setPwForm({ ...pwForm, new_password: e.target.value })}
+                placeholder="Minimum 8 caractères"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Confirmer le nouveau mot de passe</label>
+              <input
+                type="password"
+                className="form-input"
+                value={pwForm.confirm}
+                onChange={(e) => setPwForm({ ...pwForm, confirm: e.target.value })}
+                placeholder="Répéter le nouveau mot de passe"
+              />
+            </div>
+            <button type="submit" className="btn btn--outline btn--full" disabled={pwLoading}>
+              {pwLoading ? 'Modification...' : 'Modifier le mot de passe'}
+            </button>
+          </form>
+        </div>
 
         {/* Devenir créateur (abonnés seulement) */}
         {user?.role === 'subscriber' && <BecomeCreatorSection onSuccess={(updatedUser) => { updateUser(updatedUser); toast.success('Vous êtes maintenant créateur !'); navigate('/tableau-de-bord'); }} />}
